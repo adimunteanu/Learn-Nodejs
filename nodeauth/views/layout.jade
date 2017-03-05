@@ -23,10 +23,11 @@ html(lang='en')
             li(class=(title=='Login'?"active":""))
               a(href='/users/login') Login
           ul.nav.navbar-nav.navbar-right
-           li
+            li
               a(href='/users/logout') Logout
     .container
-     block content
+      != messages()
+      block content
      
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js')
     script(src='javascripts/bootstrap.js')
