@@ -5,6 +5,7 @@ var upload=multer({dest:'./uploads'});
 var passport=require('passport');
 var LocalStrategy=require('passport-local').Strategy;
 var User=require('../models/user');
+var _ = require('underscore');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -44,6 +45,7 @@ passport.use(new LocalStrategy(function(username,password,done){
     User.comparePassword(password,user.password,function(err,isMatch){
       if(err) return done(err);
       if(isMatch){
+        _.user=user.username;
         return done(null,user);
       } else {
         return done(null,false,{message:'Invalid Password'});
