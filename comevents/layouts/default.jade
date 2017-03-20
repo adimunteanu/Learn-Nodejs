@@ -27,6 +27,9 @@ html
             li: a(href='/contact/') Contact
           ul.nav.navbar-nav.navbar-right
             if user && user.username
+              li: a(href='/myevents')
+                i.fa.fa-calendar
+                | My Events
               li: a(href='/events/add')
                 i.fa.fa-plus
                 | Add Event
@@ -57,5 +60,6 @@ html
     //if lte IE 9
       script(src='/layouts/ie-sucks.min.js?#{cacheBreaker}')
     script(src='/layouts/core.min.js?#{cacheBreaker}')
-
+    script(src='/layouts/main.js')
+    
     block feet
