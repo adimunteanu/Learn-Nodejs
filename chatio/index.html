@@ -47,10 +47,12 @@
       background:#f4f4f4;
       padding:10px;
       margin-left: 20px;
+
     }
 
     input{
       height:30px;
+      border:solid 1px #ccc
     }
   </style>
 </head>
@@ -59,6 +61,7 @@
     <div id="namesWrapper">
       <h2>ChatIO</h2>
       <p>Create Username:</p>
+      <div id="error"></div>
       <form id="usernameForm">
         <input type="text" size="35" id="username"/>
         <input type="submit" value="Submit"/>
@@ -81,5 +84,51 @@
       </div>
     </div>
   </div>
+
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+  $(function(){
+    var socket=io.connect();
+    var $messageForm=$('#messageForm');
+    var $message = $('#message');
+    var $chat=$('#chatWindow');
+    var $usernameForm=$('#usernameForm');
+    var $users=$('#users');
+    var $username=$('#username');
+    var $error=$('#error');
+
+    $messageForm.submit(function(e){
+      e.preventDefault();
+      socket.emit('send message',$message.val());
+      $message.val('');
+    });
+
+    $usernameForm.submit(function(e){
+      e.preventDefault();
+      socket.emit('new user', $username.val(),function(data){
+        if(data){
+          $('#namesWrapper').hide();
+          $('#mainWrapper').show();
+        } else {
+          $error.html('Username is taken');
+        }
+      });
+    });
+
+    socket.on('usernames',function(data){
+      var html='';
+      for(i=0;i<data.length;i++)
+      {
+        html+=data[i]+ '<br>';
+      }
+      $users.html(html);
+    });
+
+    socket.on('new message',function(data){
+      $chat.append('<strong>'+data.user+': '+'</strong>'+data.msg+'<br>');
+    });
+  });
+  </script>
 </body>
 </html>
